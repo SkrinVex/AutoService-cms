@@ -1,0 +1,7 @@
+build/
+*.db
+*.user
+*.zip
+dist/
+.vscode/
+.idea/
