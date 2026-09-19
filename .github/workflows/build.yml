@@ -28,11 +28,10 @@ jobs:
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2022_64'
-          modules: 'qtbase'
 
       - name: Configure CMake
         run: |
-          cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="${{ env.Qt6_DIR }}"
+          cmake -B build -S . -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="${{ env.QT_ROOT_DIR }}"
 
       - name: Build Project
         run: |
@@ -42,7 +41,11 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path dist
-          Copy-Item -Path build/AutoService.exe -Destination dist/
+          if (Test-Path "build/Release/AutoService.exe") {
+              Copy-Item -Path "build/Release/AutoService.exe" -Destination dist/
+          } else {
+              Copy-Item -Path "build/AutoService.exe" -Destination dist/
+          }
 
       - name: Run windeployqt
         shell: pwsh
